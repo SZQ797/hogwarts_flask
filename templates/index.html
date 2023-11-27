@@ -2,13 +2,151 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <title>图书管理系统</title>
+    <style>
+        /* div{
+            border-style: solid;
+            margin: auto;
+            text-align: center;
+        } */
+        .main{
+            width: 1200px;
+            margin: auto;
+            text-align: center;
+        }
+        .op{
+            display: flex;
+            padding-bottom: 20px;
+        }
+        .op div{
+            margin: auto;
+        }
+        .info{
+            margin: auto;
+            text-align: center;
+        }
+        .table{
+            margin: auto;
+            text-align: center;
+            display: flex;
+        }
+        .table div{
+            border-style: solid;
+            width: 200px;
+        }
+        .add{
+            margin: 0px 200px;
+            display: flex;
+            text-align: center;
+        }
+        .jump{
+            text-decoration: none;
+            color: black;
+        }
+        .jump:hover{color: blue; text-decoration: underline;}
+    </style>
+
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        $(function(){
+            $.get("http://127.0.0.1:5000/list", function(data){
+                console.log(data[1].name)
+                var str_html = ""
+                str_html += "<div class='table'>"
+                str_html += "<div>id</div>"
+                str_html += "<div>书名</div>"
+                str_html += "<div>简介</div>"
+                str_html += "<div>价格</div>"
+                str_html += "<div>数量</div>"
+                str_html += "<div>操作</div>"
+                str_html += "</div>"
+
+                for(var i=0; i<data.length; i++){
+                    var book = data[i]
+                    str_html += "<div class='table'>"
+                    str_html += "<div>" + book.bid + "</div>"
+                    str_html += "<div>" + book.name + "</div>"
+                    str_html += "<div>" + book.summary + "</div>"
+                    str_html += "<div>" + book.price + "</div>"
+                    str_html += "<div>" + book.quantity + "</div>"
+                    str_html += "<div><a href='update' class='jump'>修改</a> <a href='delete' class='jump'>删除</a></div>"
+                    str_html += "</div>"
+                }
+
+                $(".info").html(str_html)
+                
+            })
+        })
+
+        function search(){
+            
+            var info_input = document.getElementById('info');
+            var info = info_input.value
+            
+            console.log(info)
+            
+            $.get("http://127.0.0.1:5000/search?info=" + info, function(data){
+                var str_html = ""
+                str_html += "<div class='table'>"
+                str_html += "<div>id</div>"
+                str_html += "<div>书名</div>"
+                str_html += "<div>简介</div>"
+                str_html += "<div>价格</div>"
+                str_html += "<div>数量</div>"
+                str_html += "<div>操作</div>"
+                str_html += "</div>"
+
+                if(info != "" && data == ""){
+                    // str_html += "<div class='table'>"
+                    str_html += "<div>暂无数据</div>"
+                    // str_html += "</div>"
+                }
+                else{
+                    for(var i=0; i<data.length; i++){
+                        var book = data[i]
+                        str_html += "<div class='table'>"
+                        str_html += "<div>" + book.bid + "</div>"
+                        str_html += "<div>" + book.name + "</div>"
+                        str_html += "<div>" + book.summary + "</div>"
+                        str_html += "<div>" + book.price + "</div>"
+                        str_html += "<div>" + book.quantity + "</div>"
+                        str_html += "<div><a href='update.html' class='jump'>修改</a> <a href='delete.html' class='jump'>删除</a></div>"
+                        str_html += "</div>"
+                    }
+                }
+
+                $(".info").html(str_html)
+            })
+
+            
+        }
+    </script>
 </head>
 <body>
-    <h1>index 页面</h1>
-    <h3>添加一本书</h3>
-    <h3>修改</h3>
-    <h3>删除一本书</h3>
-    <h3>搜索</h3>
+<div class="main">
+    <div class="title">
+        <h2>图书管理系统</h2>
+    </div>
+
+    <div class="op">
+        <div class="add">
+            <a href="add" class="jump">添加图书</a>
+        </div>
+        <div>
+            <form class="search" id="form_search">
+                <input type="text" id="info">
+                <button type="button" onclick="search()">搜索🔍</button>
+            </form>
+        </div>
+    </div>
+    <div class="info">
+        <!-- 这里用表格形式显示数据 -->
+
+    </div>
+</div>
 </body>
 </html>

@@ -16,9 +16,13 @@ CREATE TABLE book (
 );
 
 """
+from flask_cors import CORS
+
 from bookControl import *
 
 app = Flask(__name__)
+"""解决跨域问题"""
+CORS(app)
 
 # 感谢 北京-5-Gemini 大哥提供的解决方法，解决了F12的preview里中文正常，response里中文乱码的问题🫡
 app.json.ensure_ascii = False

@@ -2,9 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加图书</title>
+    <style>
+        
+        .main{
+            width: 1200px;
+            margin: auto;
+            text-align: center;
+            border-style: solid;
+        }
+        .form_add{
+            margin: auto;
+            text-align: center;
+            border-style: solid;
+            display: flex;
+        }
+    </style>
+
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        function add(){
+            data = []
+            var name = document.getElementById("name").value
+            var price = document.getElementById("price").value
+            var summary = document.getElementById("summary").value
+            var quantity = document.getElementById("quantity").value
+
+            data["name"] = name
+            data["price"] = price
+            data["summary"] = summary
+            data["quantity"] = quantity
+
+            $.post("http://127.0.0.1:5000/add", data)
+        }
+    </script>
 </head>
 <body>
-    <h1>add 页面</h1>
+    <div class="main">
+        
+        <h2>添加图书</h2>
+        <div class="form_add"></div>
+            <form class="search" id="form_search" action="http://127.0.0.1:5000/add" method="post">
+                <div>书名:<input type="text" id="name" name="name" placeholder="请输入书名"></div>
+                <div>价格:<input type="text" id="price" name="price" placeholder="请输入价格"></div>
+                <div>概要:<input type="text" id="summary" name="summary" placeholder="请输入概要"></div>
+                <div>库存:<input type="text" id="quantity" name="quantity" placeholder="请输入库存"></div>
+                <div><button type="submit">保存</button></div>
+            </form>
+            
+        </div>
+    </div>
+    
 </body>
 </html>

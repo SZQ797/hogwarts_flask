@@ -17,21 +17,18 @@ class DbUtils:
         self.db_connect.commit()
         self.db_connect.close()
 
-    def select(self, name=None, summary=None):
+    def select(self, info=None):
         self.connect()
 
         cursor = self.db_connect.cursor()
-        sql = """SELECT * FROM book WHERE 1=1"""
-        if name:
-            sql += f"AND name LIKE %{name}%"
-
-        if summary:
-            sql += f"AND summary LIKE %{summary}% "
+        sql = """SELECT * FROM book WHERE 1=1 """
+        if info:
+            sql += f"AND name LIKE '%{info}%' OR summary LIKE '%{info}%'"
 
         print(f"执行的SQL是：{sql}")
         cursor.execute(sql)
         data = cursor.fetchall()
-        print(f"查询结果：{data}")
+        # print(f"查询结果：{data}")
 
         datas = []
         for i in data:
@@ -43,7 +40,7 @@ class DbUtils:
             book["quantity"] = i[4]
 
             datas.append(book)
-        print(f"datas是：{datas}")
+        # print(f"datas是：{datas}")
 
         cursor.close()
         self.close_connection()
@@ -78,4 +75,28 @@ class DbUtils:
 
         cursor.close()
         self.close_connection()
-        return self.select()
+        return {"code": 0, "result": "success"}
+
+    def delete(self, bid):
+        self.connect()
+        cursor = self.db_connect.cursor()
+        sql = f"""DELETE FROM book WHERE bid = '{bid}'"""
+        print(f"执行的SQL是:{sql}")
+        # sql = ""
+        cursor.execute(sql)
+        self.db_connect.commit()
+        cursor.close()
+        self.close_connection()
+        return {"code": 0, "result": "success"}
+
+    def update(self, bid, name, price, summary, quantity):
+        self.connect()
+        cursor = self.db_connect.cursor()
+        sql = f"""UPDATE `book` SET `name` = '{name}', `price` = {price}, `summary` = '{summary}', `quantity` = {quantity} WHERE `bid` = {bid};"""
+
+        print(f"执行的SQL是：{sql}")
+        cursor.execute(sql)
+        cursor.close()
+        self.db_connect.commit()
+        self.close_connection()
+        return {"code": 0, "result": "success"}
